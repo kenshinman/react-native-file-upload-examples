@@ -8,16 +8,19 @@ import {
   Modal,
   Image,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  Button
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
-import Share, { ShareSheet, Button } from "react-native-share";
+import Share, { ShareSheet } from "react-native-share";
 import RNFetchBlob from "react-native-fetch-blob";
-import * as firebase from "firebase";
+import firebase from "firebase";
+import Toast, { DURATION } from "react-native-easy-toast";
+import ResponsiveImage from "react-native-responsive-image";
 
+const { width, height } = Dimensions.get("window");
 const options = {
-  title: "Select Avatar",
-  customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
+  title: "Select Picture",
   storageOptions: {
     skipBackup: true,
     path: "images"
@@ -38,15 +41,7 @@ class FileUploader extends Component {
       fbUrl: null
     };
 
-    const config = {
-      apiKey: "AIzaSyDn6MpVFC9ZgQ0KXUoL-8hXNEBwQVWczxQ",
-      authDomain: "glowing-inferno-2473.firebaseapp.com",
-      databaseURL: "https://glowing-inferno-2473.firebaseio.com",
-      projectId: "glowing-inferno-2473",
-      storageBucket: "glowing-inferno-2473.appspot.com",
-      messagingSenderId: "472136424293"
-    };
-    firebase.initializeApp(config);
+    
 
     this.imagesRef = firebase.storage().ref("images");
     this.pickImage = this.pickImage.bind(this);
@@ -91,7 +86,7 @@ class FileUploader extends Component {
   }
 
   uploadImage() {
-    this.setState({uploading: true})
+    this.setState({ uploading: true });
     const { path, mime, fileName } = this.state;
     let ext = mime.split("/")[1];
     const imageRef = this.imagesRef.child(fileName);
@@ -119,7 +114,11 @@ class FileUploader extends Component {
           })
           .then(url => {
             console.log(url);
-            this.setState({ fbUrl: url, uploading: false });
+            this.setState({ fbUrl: url, uploading: false }, () => {
+              this.refs.image.show("Image uploaded Successfully", 2000, () => {
+                console.log("done");
+              });
+            });
           });
       })
       .catch(err => {
@@ -129,24 +128,32 @@ class FileUploader extends Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TouchableOpacity onPress={this.pickImage}>
-          <Text>Open Camera</Text>
-        </TouchableOpacity>
-        <Image source={this.state.source} style={{ width: 150, height: 210 }} />
+        <Toast ref="image" />
+        <Button title="Select Picture" onPress={this.pickImage} />
+        {this.state.fileName ? (
+          <Text>Selected FIle: {this.state.fileName}</Text>
+        ) : null}
         {this.state.fbUrl ? <Text>Firbase Image</Text> : null}
-        <Image
+        <ResponsiveImage
           source={{ uri: this.state.fbUrl }}
-          style={{ width: 150, height: 210 }}
+          // style={{ width: undefined, height: undefined, flex: 1 }}
+          initWidth={width * 0.9}
+          initHeight={width * 0.9}
+          resizeMode="contain"
         />
 
         {this.state.base64src
           ? [
-              <Button key="share" onPress={this.shareImage}>
-                Share Image
-              </Button>,
-              <Button key="upload" onPress={this.uploadImage}>
-                Upload Image
-              </Button>
+              <Button
+                title="Share Image"
+                key="share"
+                onPress={this.shareImage}
+              />,
+              <Button
+                title="Upload Image"
+                key="upload"
+                onPress={this.uploadImage}
+              />
             ]
           : null}
 
