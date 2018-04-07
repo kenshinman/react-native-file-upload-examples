@@ -13,6 +13,8 @@ import ResponsiveImage from "react-native-responsive-image";
 import ImagePicker from "react-native-image-picker";
 import RNFetchBlob from "react-native-fetch-blob";
 
+import secret from '../secret'
+
 const { width, height } = Dimensions.get("window");
 const options = {
   title: "Select Avatar",
@@ -24,8 +26,8 @@ const options = {
 };
 
 let timestamp = ((Date.now() / 1000) | 0).toString();
-let api_key = "986218266523366";
-let api_secret = "r-1qmre7mtm3fWcfRaYB8gRChkI";
+let api_key = secret.cloudinary.api_key
+let api_secret = secret.cloudinary.api_secret
 let cloud = "kaydence-co";
 let hash_string = "timestamp=" + timestamp + api_secret;
 let signature = CryptoJS.SHA1(hash_string).toString();

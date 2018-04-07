@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import { RootNavigator } from "./src/components/Routes";
 import Home from "./src/components/Home";
 import FileUpload from "./src/components/FileUploader";
+import secret from './src/secret'
 
 console.disableYellowBox = true;
 
@@ -13,14 +14,7 @@ export default class App extends Component {
   constructor() {
     super();
 
-    const config = {
-      apiKey: "AIzaSyDn6MpVFC9ZgQ0KXUoL-8hXNEBwQVWczxQ",
-      authDomain: "glowing-inferno-2473.firebaseapp.com",
-      databaseURL: "https://glowing-inferno-2473.firebaseio.com",
-      projectId: "glowing-inferno-2473",
-      storageBucket: "glowing-inferno-2473.appspot.com",
-      messagingSenderId: "472136424293"
-    };
+    const config = secret.firebase
     firebase.initializeApp(config);
   }
   render() {

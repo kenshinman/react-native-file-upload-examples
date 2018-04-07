@@ -3,8 +3,8 @@ import { View, Text, ScrollView, FlatList } from "react-native";
 import { List, ListItem } from "react-native-elements";
 
 const data = [
-  { title: "Firebase Upload", id: 1, subtitle: "Example using firebase as our cloud storage", component: 'FileUploader' },
-  { title: "Cloudinary Upload", id: 2, subtitle: "Clourinary upload example", component: 'CloudinaryUpload' },
+  { title: "Firebase Upload Example", id: 1, subtitle: "Example using firebase as our cloud storage", component: 'FileUploader' },
+  { title: "Cloudinary Upload Example", id: 2, subtitle: "Clourinary upload example", component: 'CloudinaryUpload' },
 ];
 
 class Home extends Component {
