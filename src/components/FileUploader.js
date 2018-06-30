@@ -88,7 +88,7 @@ class FileUploader extends Component {
   uploadImage() {
     this.setState({ uploading: true });
     const { path, mime, fileName } = this.state;
-    let ext = mime.split("/")[1];
+    // let ext = mime.split("/")[1];
     const imageRef = this.imagesRef.child(fileName);
     const Blob = RNFetchBlob.polyfill.Blob;
     const fs = RNFetchBlob.fs;
